@@ -9,8 +9,25 @@ app.get('/', function (req, res) {
 app.get('/bingo', function (req, res) {
   fs.readFile('src/numbers.txt', 'utf8', (err, data) => {
     if (err) throw err;
-    res.send(data.split('\n').slice(0, -1).join(', '));
+    const bingoNumbers = data.split('\n').slice(0, -1);
+
+    if (req.query['myNumbers']) {
+      let myNumbers = req.query['myNumbers'].split(',');
+
+      if (bingo(myNumbers, bingoNumbers)) {
+        res.send('Bingo');
+      } else {
+        res.send('The bingo game is already started, sorry your numbers doesn\'t match with known numbers ' + bingoNumbers.join(', ') + '; so you can not say Bingo');
+      }
+
+    } else {
+      res.send('The bingo game is already started and known numbers are ' + bingoNumbers.join(', '));
+    }
+
   });
 });
+
+const bingo = (myNumbers, bingoNumbers) => bingoNumbers.sort().toString() === myNumbers.sort().toString();
+
 
 module.exports = app;
