@@ -3,13 +3,14 @@ const fs = require('fs');
 
 const app = express();
 
+const BINGO_FILE_PATH = 'src/numbers.txt';
 
 app.get('/', function (req, res) {
   res.send('Hello from serveur workshop-express-eval');
 });
 
 app.get('/bingo', function (req, res) {
-  fs.readFile('src/numbers.txt', 'utf8', (err, data) => {
+  fs.readFile(BINGO_FILE_PATH, 'utf8', (err, data) => {
     if (err) {
       console.error(err);
       res.status(500).send('Something broke!');
